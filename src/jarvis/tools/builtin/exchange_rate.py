@@ -6,7 +6,7 @@ from ...debug import debug_log
 from ..base import Tool, ToolContext
 from ..types import ToolExecutionResult
 
-_FRANKFURTER_BASE = "https://api.frankfurter.app"
+_ER_API_BASE = "https://open.er-api.com/v6/latest"
 
 # Common currency names for readable output
 _CURRENCY_NAMES: Dict[str, str] = {
@@ -115,25 +115,22 @@ class ExchangeRateTool(Tool):
         debug_log(f"    💱 fetching {base}→{target} rate", "tools")
 
         try:
-            url = f"{_FRANKFURTER_BASE}/latest"
             resp = requests.get(
-                url,
-                params={"base": base, "symbols": target},
+                f"{_ER_API_BASE}/{base}",
                 timeout=8,
                 headers={"User-Agent": "JARVIS/1.0"},
             )
+            resp.raise_for_status()
+            data = resp.json()
 
-            if resp.status_code == 404:
+            if data.get("result") != "success":
                 return ToolExecutionResult(
                     success=False,
                     reply_text=(
-                        f"Currency '{base}' or '{target}' not found. "
+                        f"Currency '{base}' not found. "
                         "Try using standard 3-letter codes like USD, EUR, PEN."
                     ),
                 )
-
-            resp.raise_for_status()
-            data = resp.json()
 
             rate = data.get("rates", {}).get(target)
             if rate is None:
@@ -143,7 +140,7 @@ class ExchangeRateTool(Tool):
                 )
 
             converted = round(amount * rate, 4)
-            date = data.get("date", "today")
+            date = data.get("time_last_update_utc", "today")[:16]
 
             base_name = _CURRENCY_NAMES.get(base, base)
             target_name = _CURRENCY_NAMES.get(target, target)
