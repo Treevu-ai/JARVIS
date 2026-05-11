@@ -1877,12 +1877,12 @@ class VoiceListener(threading.Thread):
                     debug_log(f"faster-whisper warmup failed: {e}", "voice")
 
         # Wait for LLM warmups before announcing "Listening!" so the first
-        # engagement is responsive. A single 60s budget is shared across
+        # engagement is responsive. A single 120s budget is shared across
         # all warmup threads so a slow/down Ollama can't block us from
         # listening — we'll just pay the cold-load cost on demand.
         warmup_threads = getattr(self, "_llm_warmup_threads", [])
         if warmup_threads:
-            budget = 60.0
+            budget = 120.0
             deadline = getattr(self, "_llm_warmup_started_at", time.time()) + budget
             for t in warmup_threads:
                 remaining = max(0.0, deadline - time.time())

@@ -358,7 +358,7 @@ Examples:
         return warm_up_ollama_model(
             self.config.ollama_base_url,
             self.config.model,
-            timeout=max(self.config.timeout_sec, 60.0),
+            timeout=max(self.config.timeout_sec, 120.0),
         )
 
     def judge(
