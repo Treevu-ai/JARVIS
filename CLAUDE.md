@@ -53,10 +53,22 @@ Use the `/triage` skill for triaging open issues and discussions. It owns the fu
 
 ## Development Environment
 
-The project uses a micromamba environment at `.mamba_env/`. Always activate it before running builds, tests, or the app:
+The project uses `uv` for environment management. Always activate the venv before running builds, tests, or the app:
 
 ```bash
-eval "$(micromamba.exe shell hook --shell bash)" && micromamba activate "C:/Users/baris/projects/jarvis/.mamba_env"
+# First run (creates .venv):
+uv venv && uv pip install -r requirements.txt
+
+# Activate:
+source .venv/bin/activate
+
+# Run tests:
+uv run pytest tests/
+
+# Run the app:
+uv run python scripts/run_linux.sh
+# or directly:
+uv run python -m src.desktop_app
 ```
 
 ## README Maintenance

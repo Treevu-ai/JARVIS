@@ -145,6 +145,7 @@ Every distinct LLM call in Jarvis, what feeds it, what consumes it, and how it i
 ## 14. Tool-specific LLM calls
 
 - **Weather** ([src/jarvis/tools/builtin/weather.py](src/jarvis/tools/builtin/weather.py), ~line 60) — `ollama_chat_model`, parses location/time/unit from the query.
+- **Exchange Rate** ([src/jarvis/tools/builtin/exchange_rate.py](src/jarvis/tools/builtin/exchange_rate.py)) — no LLM call; pure HTTP fetch to Frankfurter API (free, no key). Returns rate + converted amount.
 - **Nutrition log_meal** ([src/jarvis/tools/builtin/nutrition/log_meal.py](src/jarvis/tools/builtin/nutrition/log_meal.py), lines 48 & 136) — `ollama_chat_model`, extracts nutrients, confirms logging.
 
 ---
